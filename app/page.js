@@ -3,6 +3,7 @@ import SearchInput from '@/components/SearchInput/SearchInput';
 import styles from './page.module.css'
 // import Link from 'next/link'
 import Layout from '@/components/Layout/Layout'
+import CountriesTable from '@/components/CountriesTable/CountriesTable';
 
 export default async function Home() {
   const Countries = await getData();
@@ -10,7 +11,9 @@ export default async function Home() {
     <Layout>
       <div className={styles.counts}>Found {Countries.length} countries</div>
 
-      <SearchInput />
+      <SearchInput placeholder="Filter by Name, Region or SubRegion"/>
+
+      <CountriesTable countries={Countries}/>
     </Layout>
   )
 }
