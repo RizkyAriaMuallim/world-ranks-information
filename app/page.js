@@ -1,26 +1,26 @@
-// import Image from 'next/image'
-import SearchInput from '@/components/SearchInput/SearchInput';
-import styles from './page.module.css'
-// import Link from 'next/link'
-import Layout from '@/components/Layout/Layout'
-import CountriesTable from '@/components/CountriesTable/CountriesTable';
+"use client"
 
-export default async function Home() {
-  const Countries = await getData();
-  return (
-    <Layout>
-      <div className={styles.counts}>Found {Countries.length} countries</div>
+import HomeComponents from "@/components/Home/Home";
+import { useEffect, useState } from 'react';
 
-      <SearchInput placeholder="Filter by Name, Region or SubRegion"/>
+export default function Home() {
+  const [Countries, setCountries] = useState(null);
 
-      <CountriesTable countries={Countries}/>
-    </Layout>
-  )
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch("https://restcountries.com/v3.1/all");
+      const countries = await res.json();
+    
+      setCountries(countries);
+    };
+    getData();
+  }, [])
+
+  if (Countries) {
+    return (
+      <HomeComponents Countries={Countries}/>
+    )
+  }else {
+    return null;
+  }
 }
-
-export const getData = async () => {
-  const res = await fetch("https://restcountries.com/v3.1/all");
-  const countries = await res.json();
-
-  return countries;
-};
