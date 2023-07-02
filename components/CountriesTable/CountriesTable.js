@@ -3,6 +3,7 @@
 import { KeyboardArrowDownRounded, KeyboardArrowUpRounded } from '@mui/icons-material';
 import styles from './CountriesTable.module.css';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const orderBy = ( countries, value, direction ) => {
     if (direction === 'asc') {
@@ -74,12 +75,16 @@ export default function CountriesTable({ countries }) {
             </div>
     
             {orderedCountries.map((country, index) => (
-                <div className={styles.row} key={index}>
-                    <div className={styles.name}>{country.name.common}</div>
+                <Link href={`/countries/${country.name.common}`} key={index}>
+                    <div className={styles.row} key={index}>
+                        <div className={styles.name}>{country.name.common}</div>
 
-                    <div className={styles.population}>{country.population}</div>
-                </div>)
-            )}
+                        <div className={styles.population}>{country.population}</div>
+                    </div>
+                </Link>
+                )
+            )
+            }
         </div>
     )
 }
