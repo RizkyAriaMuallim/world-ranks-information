@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import styles from './Layout.module.css'
-export default function Layout({ children }) {
+export default function Layout({ children, title = "World Ranks" }) {
     return (<div className={styles.container}>
         <header className={styles.header}>
-          <title>World Ranks</title>
+          <title>{title}</title>
           <Link href='/'>
               <svg
                 width="175"
@@ -36,7 +36,7 @@ export default function Layout({ children }) {
           {children}
         </main>
         <footer className={styles.footer}>
-          footer
+          RizkyDev x Thu Nghiem
         </footer>
       </div>)
 }
