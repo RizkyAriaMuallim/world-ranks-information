@@ -59,3 +59,14 @@
 .details_panel_label {
     color: var(--text-color-secondary);
 }
+
+.details_panel_borders {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+}
+
+.details_panel_borders_country {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}

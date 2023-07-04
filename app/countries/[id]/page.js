@@ -12,30 +12,47 @@ const Country = ({ params }) => {
     const [bordersNeighbour, setBordersNeighbour] = useState([])
 
     useEffect(() => {
+        const getCountryCCA = async (cca) => {
+          const res = await fetch(`https://restcountries.com/v3.1/alpha/${cca}`);
+          const countries = await res.json();
+
+          const { flags } = countries[0];
+          const { svg } = flags;
+
+          setBordersNeighbour( bordersNeighbour => [...bordersNeighbour, svg] )
+        };
+
         const getCountryByName = async () => {
           const res = await fetch(`https://restcountries.com/v3.1/name/${id}`);
           const countries = await res.json();
         
           setCountriesByID(countries);
+
+          const { borders } = countries[0];
+
+          if (borders !== undefined) {
+            borders.map(async (border) => {
+              getCountryCCA(border)
+            });
+          }
         };
-        getCountryByName();
         
-        const { borders } = countries[0];
-        setBordersNeighbour(
-          // next works in here!!!
-        )
+        getCountryByName();
       }, [id])
 
     if (CountriesByID) {
       //  destruct the object in here
-      const { name, flags, region, population, area, capital, languages, currencies } = CountriesByID[0];
+      const { name, flags, region, population, area, capital, languages, currencies, borders, gini } = CountriesByID[0];
       const { nativeName, common } = name;
 
-      const fullLanguage = Object.keys(languages).map((key) => languages[key]).join(", ")
-      const fullCurrencies = Object.keys(currencies).map((key) => currencies[key].name).join(", ")
-      const fullNativeNames = Object.keys(nativeName).map((key) => nativeName[key].common).join(", ")
+      var dataGini;
+      if (gini !== undefined) {
+        dataGini = Object.keys(gini).map((key) => gini[key]).map((data) => data);
+      }
 
-      // console.log(fullNativeNames)
+      const fullLanguage = Object.keys(languages).map((key) => languages[key]).join(", ");
+      const fullCurrencies = Object.keys(currencies).map((key) => currencies[key].name).join(", ");
+      const fullNativeNames = Object.keys(nativeName).map((key) => nativeName[key].common).join(", ");
 
       return <Layout title={name.common}>
         <div>
@@ -87,7 +104,33 @@ const Country = ({ params }) => {
               <div className={styles.details_panel_label}>Native name</div>
               <div className={styles.details_panel_value}>{fullNativeNames}</div>
             </div>
+
+            {gini !== undefined && 
+              <div className={styles.details_panel_row}>
+                <div className={styles.details_panel_label}>Gini</div>
+                <div className={styles.details_panel_value}>{dataGini} %</div>
+              </div>
+            }
           </div>
+          {borders !== undefined &&
+            <div className={styles.details_panel_borders}>
+              {bordersNeighbour.map((data, index) => (
+                  <div className={styles.details_panel_borders_country} key={index}>
+                    {/* Next Task: Change to img rather than Image/next(?) */}
+                    <Image 
+                      src={data}
+                      alt={borders[index]}
+                      fill={true}
+                      priority={true}
+                    />
+
+                    <div className={styles.details_panel_borders_name}>{borders[index]}</div>
+                  </div>
+                )
+              )}
+            </div>
+          }
+          
         </div>
       </Layout>
     }else {
