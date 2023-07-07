@@ -25,8 +25,13 @@ export default function HomeComponents({ Countries }) {
   if (Countries) {
     return (
       <Layout>
-        <div className={styles.counts}>Found {Countries.length} countries</div>
-        <SearchInput placeholder="Filter by Name, Region or SubRegion" keyWord={keyword} change={onInputChange}/>
+        <div className={styles.inputContainer}> 
+          <div className={styles.counts}>Found {Countries.length} countries</div>
+
+          <div className={styles.input}>
+            <SearchInput placeholder="Filter by Name, Region or SubRegion" keyWord={keyword} change={onInputChange}/>
+          </div>
+        </div>
 
         <CountriesTable countries={getfilterCountries(Countries, keyword)}/>
       </Layout>
